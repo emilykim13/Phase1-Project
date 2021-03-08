@@ -11,5 +11,4 @@ class CreateWorkouts < ActiveRecord::Migration[6.1]
       t.integer :back_id
     end
   end
-
 end
