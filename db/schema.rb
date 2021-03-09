@@ -42,6 +42,18 @@ ActiveRecord::Schema.define(version: 2021_03_08_220818) do
     t.integer "duration"
   end
 
+  create_table "users", force: :cascade do |t|
+    t.string "user_name"
+    t.string "password"
+    t.string "first_name"
+    t.string "last_name"
+    t.integer "weight"
+    t.float "height"
+    t.string "gender"
+    t.integer "BMI"
+    t.integer "birth_year"
+  end
+
   create_table "users_workouts", force: :cascade do |t|
     t.string "name"
     t.integer "users_id"
