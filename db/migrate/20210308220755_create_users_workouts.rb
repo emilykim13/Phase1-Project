@@ -3,7 +3,7 @@ class CreateUsersWorkouts < ActiveRecord::Migration[6.1]
     create_table :users_workouts do |t|
       t.string :name
       t.integer :users_id
-      t.integer :worksout_id
+      t.integer :workouts_id
       t.integer :total_duration
       t.string :favorites
       t.integer :date
