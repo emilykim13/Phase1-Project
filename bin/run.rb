@@ -16,7 +16,19 @@ def login
                 puts "Let's Workout!"
             else
                 puts "Incorrect username or password."
-
+                ## 
+                login_try_again = TTY::Prompt.new
+                try_again = login_try_again.select("Would you like to try again?", ["Yes", "No"])
+                if try_again == "Yes"
+                    current_username = prompt.ask("What is your username?")
+                    current_password = prompt.ask("Enter your password.")
+                    if users.include?(current_username) && User.all.find_by(password: current_password)
+                        puts "Let's Workout!"
+                    end
+                else try_again == "No"
+                    welcome
+                    login
+                end
                 exit!
             end
         end
@@ -32,6 +44,8 @@ def login
             new_birth_year = prompt.ask("What year were you born?")
             User.create(user_name: new_username, password: new_password, first_name: new_first_name, last_name: new_last_name, weight: new_weight, height: new_height, gender: new_gender, BMI: new_BMI, birth_year: new_birth_year)
             puts "New account made!"
+            welcome
+            login
         end
         if login_choice == "Exit"
             exit!
