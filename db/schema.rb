@@ -24,7 +24,7 @@ ActiveRecord::Schema.define(version: 2021_03_08_220818) do
     t.integer "duration"
   end
 
-  create_table "back", force: :cascade do |t|
+  create_table "backs", force: :cascade do |t|
     t.string "name"
     t.string "intensity"
     t.integer "duration"
