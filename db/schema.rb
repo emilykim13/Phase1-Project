@@ -57,7 +57,7 @@ ActiveRecord::Schema.define(version: 2021_03_08_220818) do
   create_table "users_workouts", force: :cascade do |t|
     t.string "name"
     t.integer "users_id"
-    t.integer "worksout_id"
+    t.integer "workouts_id"
     t.integer "total_duration"
     t.string "favorites"
     t.integer "date"
@@ -70,7 +70,7 @@ ActiveRecord::Schema.define(version: 2021_03_08_220818) do
     t.integer "arms_id"
     t.integer "legs_id"
     t.integer "shoulders_id"
-    t.integer "back_id"
+    t.integer "backs_id"
   end
 
 end
