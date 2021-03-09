@@ -14,22 +14,5 @@ lunges = Leg.create(name: "lunges", intensity: "low", duration: 1.0)
 deadlifts = Back.create(name: "Deadlifts", intensity: "high", duration: 1.0)
 pullups = Shoulder.create(name: "Pull-ups", intensity: "high", duration: 1.0)
 emily = User.create(user_name: "emilykim13", password: "ilikememes", first_name: "emily", last_name: "nguyen", weight: 128, height: 67.0, gender: "female", BMI: 20.0, birth_year: 1997)
-workout1 = Workout.create(name: "Emily Can't Lift", type: "HIIT", abs_id: russian_twists.id, arms_id: barbell_bicep_curl.id, legs_id: lunges.id, shoulders_id: pullups.id, backs_id: deadlifts.id)
-UsersWorkout.create(name: workouts.name, users_id: emily.id, workouts_id: workout1.id, total_duration: 10.0, favorites: nil, date: 03-02-2021)
-
-# create_table :workouts do |t|
-#     t.string :name
-#     t.string :type
-#     t.integer :abs_id
-#     t.integer :arms_id
-#     t.integer :legs_id
-#     t.integer :shoulders_id
-#     t.integer :back_id
-# create_table :users_workouts do |t|
-#     t.string :name
-#     t.integer :users_id
-#     t.integer :workouts_id
-#     t.integer :total_duration
-#     t.string :favorites
-#     t.integer :date
-#   end
+workout1 = Workout.create(name: "Emily Can't Lift", workout_type: "HIIT", abs_id: russian_twists.id, arms_id: barbell_bicep_curl.id, legs_id: lunges.id, shoulders_id: pullups.id, backs_id: deadlifts.id)
+UsersWorkout.create(name: workout1.name, users_id: emily.id, workouts_id: workout1.id, total_duration: 10.0, favorites: nil, date: 03-02-2021)
