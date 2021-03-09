@@ -1,6 +1,6 @@
 class CreateUsersWorkouts < ActiveRecord::Migration[6.1]
   def change
-    create_tables :users_workouts do |t|
+    create_table :users_workouts do |t|
       t.string :name
       t.integer :users_id
       t.integer :worksout_id
