@@ -120,6 +120,7 @@ def select_from_gallery
             end
         end
         puts workout_choice.id # return exercise method
+        menu
 end
 
 def workout_type_options #method for make_new_workout
@@ -159,7 +160,7 @@ def make_new_workout
 end
 
 def look_past_workouts
-    UsersWorkout.all.select{|object| object.id == users_workout.users_id}
+    menu
 end
 # >>>>>>>
 # >>>>>>> "Look at my past workouts" consider a leaderboard instead? whatever makes more sense and is doable
@@ -188,7 +189,7 @@ def menu
             if build_or_start == "Select from gallery"
                 select_from_gallery # incomplete; does not give object id; line 92
             elsif build_or_start == "Make a new workout"
-                make_new_workout #incomplete; does not have method for one to many models for .create; line 102
+                make_new_workout
             elsif build_or_start == "Go back to menu"
                 menu
             end
@@ -210,7 +211,6 @@ def menu
                 elsif account_prompt == "Go back to menu"
                     menu
                 end
-                
         end
 end
 # binding.pry
