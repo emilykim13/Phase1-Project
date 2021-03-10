@@ -123,6 +123,8 @@ def delete_account
         word = Users.all.find{|object| object.user_name} # User.id
         word.destroy
         puts "Account deleted."
+        welcome
+        login
     elsif sure = "No"
         menu # this should return it to menu
     end
@@ -133,11 +135,13 @@ def menu
     menu_choice = options.select("What would you like to do?", ["Start a new workout", "Look at my past workouts", "Look at my account details"])
         if menu_choice == "Start a new workout"
             a_new_workout = TTY::Prompt.new
-            build_or_start = a_new_workout.select("Do you want to select from our workouts gallery or make a new workout?", ["Select from gallery", "Make a new workout"])
+            build_or_start = a_new_workout.select("Do you want to select from our workouts gallery or make a new workout?", ["Select from gallery", "Make a new workout", "Go back to menu"])
             if build_or_start == "Select from gallery"
                 select_from_gallery # incomplete; does not give object id
             elsif build_or_start == "Make a new workout"
                 make_new_workout #incomplete; does not have method for one to many models for .create
+            elsif build_or_start == "Go back to menu"
+                menu
             end
         elsif menu_choice == "Look at my past workouts"
             # look_past_workouts 
