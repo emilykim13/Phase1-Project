@@ -52,64 +52,110 @@ def login
 end
 # the 5 one to many models
 # >>>>>>>>>
+def intensity_options #method for make_new_workout/new_models
+    prompt = TTY::Prompt.new
+    inten_opt = prompt.select("What is the intensity of this workout?", ["Low", "Medium", "High"])
+    if inten_opt == "Low"
+        set_intensity = "low"
+    elsif inten_opt == "Medium"
+        set_intensity = "medium"
+    elsif inten_opt == "High"
+        set_intensity = "high"
+    end
+    set_intensity
+end
 def new_abs
     prompt = TTY::Prompt.new
     new_name = prompt.ask("Name of this ab exercise:".blue)
-    new_intensity = prompt.ask("Is this low, medium or high intensity?".blue)
+    new_intensity = intensity_options
     new_duration = prompt.ask("What is the duration of this exercise in minute(s)?".blue)
-    Ab.create(name: new_name, intensity: new_intensity, duration: new_duration.to_f)
+    new_ab = Ab.create(name: new_name, intensity: new_intensity, duration: new_duration.to_f)
+    return new_ab
+    # binding.pry
 end
 def new_arms
     prompt = TTY::Prompt.new
-    new_name = prompt.ask("Name of this ab exercise:".blue)
-    new_intensity = prompt.ask("Is this low, medium or high intensity?".blue)
+    new_name = prompt.ask("Name of this arm exercise:".blue)
+    new_intensity = intensity_options
     new_duration = prompt.ask("What is the duration of this exercise in minute(s)?".blue)
-    Arm.create(name: new_name, intensity: new_intensity, duration: new_duration.to_f)
+    new_arm = Arm.create(name: new_name, intensity: new_intensity, duration: new_duration.to_f)
+    return new_arm
 end
 def new_legs
     prompt = TTY::Prompt.new
-    new_name = prompt.ask("Name of this ab exercise:".blue)
-    new_intensity = prompt.ask("Is this low, medium or high intensity?".blue)
+    new_name = prompt.ask("Name of this leg exercise:".blue)
+    new_intensity = intensity_options
     new_duration = prompt.ask("What is the duration of this exercise in minute(s)?".blue)
-    Leg.create(name: new_name, intensity: new_intensity, duration: new_duration.to_f)
+    new_leg = Leg.create(name: new_name, intensity: new_intensity, duration: new_duration.to_f)
+    return new_leg
 end
 def new_shoulders
     prompt = TTY::Prompt.new
-    new_name = prompt.ask("Name of this ab exercise:".blue)
-    new_intensity = prompt.ask("Is this low, medium or high intensity?".blue)
+    new_name = prompt.ask("Name of this shoulder exercise:".blue)
+    new_intensity = intensity_options
     new_duration = prompt.ask("What is the duration of this exercise in minute(s)?".blue)
-    Shoulder.create(name: new_name, intensity: new_intensity, duration: new_duration.to_f)
+    new_shoulder = Shoulder.create(name: new_name, intensity: new_intensity, duration: new_duration.to_f)
+    return new_shoulder
 end
 def new_backs
     prompt = TTY::Prompt.new
-    new_name = prompt.ask("Name of this ab exercise:".blue)
-    new_intensity = prompt.ask("Is this low, medium or high intensity?".blue)
+    new_name = prompt.ask("Name of this back exercise:".blue)
+    new_intensity = intensity_options
     new_duration = prompt.ask("What is the duration of this exercise in minute(s)?".blue)
-    Back.create(name: new_name, intensity: new_intensity, duration: new_duration.to_f)
+    new_back = Back.create(name: new_name, intensity: new_intensity, duration: new_duration.to_f)
+    return new_back
 end
+
+#>>>>
+
 # >>>>>>>
 # >>>>>>> "Start a new workout"
+
 def select_from_gallery
     prompt_workouts = TTY::Prompt.new
         workouts = Workout.all
         workout_choice = prompt_workouts.select("Pick a workout.") do |menu|
             workouts.each do |object|
-                menu.choice "#{object.name}", object.id   
+                menu.choice "#{object.name}", object
             end
         end
+        puts workout_choice.id # return exercise method
+end
+
+def workout_type_options #method for make_new_workout
+    prompt = TTY::Prompt.new
+    type_opt = prompt.select("What type of workout is this?", ["HIIT", "Resistance Training", "Cardio", "Flexibility"])
+    if type_opt == "HIIT"
+        set_type = "HIIT"
+    elsif type_opt == "Resistance Training"
+        set_type = "Resistance Training"
+    elsif type_opt == "Cardio"
+        set_type = "Cardio"
+    elsif type_opt == "Flexibility"
+        set_type = "Flexibility"
+    end
+    set_type
 end
 
 def make_new_workout
     prompt = TTY::Prompt.new
     puts "Put your workout together!"
     new_name = prompt.ask("Name this workout:".blue)
-    new_workout_type = prompt.select("What type of workout is this?" ["HIIT", "Resistance Training", "Cardio", "Flexibility"])
-    # new_abs_id = 
-    # new_arms_id = 
-    # new_legs_id = 
-    # new_shoulders_id = 
-    # new_backs_id = 
-    ###
+    new_workout_type = workout_type_options
+    abs = new_abs
+    # binding.pry
+    arms = new_arms
+    legs = new_legs
+    shoulders = new_shoulders
+    backs = new_backs
+    new_abs_id = abs.id
+    new_arms_id = arms.id
+    new_legs_id = legs.id
+    new_shoulders_id = shoulders.id
+    new_backs_id = backs.id
+    Workout.create(name: new_name, workout_type: new_workout_type, abs_id: new_abs_id, arms_id: new_arms_id, legs_id: new_legs_id, shoulders_id: new_shoulders_id, backs_id: new_backs_id)
+    puts "Your new workout has been added to workout gallery!".magenta
+    menu
 end
 
 def look_past_workouts
@@ -129,7 +175,7 @@ def delete_account
         welcome
         login
     elsif sure = "No"
-        menu # this should return it to menu
+        menu
     end
 end
 
@@ -150,7 +196,7 @@ def menu
             # look_past_workouts 
             # past 10 workouts
             puts "coding in-progress..."
-        elsif menu_choice = "Look at my account details"
+        elsif menu_choice = "Look at my account details" #stretch goals
             a_prompt = TTY::Prompt.new
             account_prompt = a_prompt.select("What do you want to do?", ["Look at my total workouts", "Change my username", "Change my password", "Delete my account", "Go back to menu"])
                 if account_prompt == "Look at my total workouts"
