@@ -1,8 +1,10 @@
 require_relative '../config/environment'
 
+
 def welcome
 title = Artii::Base.new(:font => "slant")
 puts title.asciify("Gym Time!!")
+
 end
 
 def login 
@@ -71,7 +73,6 @@ def new_abs
     new_duration = prompt.ask("What is the duration of this exercise in minute(s)?".blue)
     new_ab = Ab.create(name: new_name, intensity: new_intensity, duration: new_duration.to_f)
     return new_ab
-    # binding.pry
 end
 def new_arms
     prompt = TTY::Prompt.new
@@ -167,18 +168,28 @@ end
 
 # >>>>>>> "Look at my account details"
 def delete_account
+    users = User.all.map {|user| user.user_name} # setting new array of just user_names
     prompt = TTY::Prompt.new
-    sure = prompt.ask("Are you sure you want to delete your account?" ["Yes", "No"])
-    if sure = "Yes"
-        word = Users.all.find{|object| object.user_name} # User.id
-        word.destroy
-        puts "Account deleted."
+    sure = prompt.select("Are you sure you want to delete your account?".red, ["Yes", "No"])
+    if sure == "Yes"                     # argument 1 ^                  ,   argument 2^
+        enter_username = prompt.ask("Please enter your username to continue:".yellow)
+        enter_password = prompt.mask("Please enter your password:".yellow)
+        if users.include?(enter_username) && User.all.find_by(password: enter_password)
+        account = User.all.select{|object| object.user_name == enter_username} #find the whole object by the the username given from enter_username
+        # binding.pry
+        account_id = account.map{|id| id.id} #modify the array to give back just the id
+        # binding.pry
+        User.destroy(account_id) #stopped here user.find_by user.id = user.id
+        # .destroy REQUIRES an integer id
+        puts "Account deleted, returning to main menu.".yellow
         welcome
         login
-    elsif sure = "No"
+        end
+    elsif sure == "No"
         menu
     end
 end
+# >>>>>>>
 
 def menu
     options = TTY::Prompt.new
