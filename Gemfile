@@ -7,5 +7,5 @@ gem "pry"
 gem "require_all"
 gem 'colorize'
 gem 'artii', '~> 2.1'
-# gem 'login'
 gem 'tty-prompt'
+gem 'rake'
