@@ -88,7 +88,7 @@ def new_backs
     Back.create(name: new_name, intensity: new_intensity, duration: new_duration.to_f)
 end
 # >>>>>>>
-
+# >>>>>>> "Start a new workout"
 def select_from_gallery
     prompt_workouts = TTY::Prompt.new
         workouts = Workout.all
@@ -115,7 +115,10 @@ end
 def look_past_workouts
     UsersWorkout.all.select{|object| object.id == users_workout.users_id}
 end
+# >>>>>>>
+# >>>>>>> "Look at my past workouts" consider a leaderboard instead? whatever makes more sense and is doable
 
+# >>>>>>> "Look at my account details"
 def delete_account
     prompt = TTY::Prompt.new
     sure = prompt.ask("Are you sure you want to delete your account?" ["Yes", "No"])
@@ -137,9 +140,9 @@ def menu
             a_new_workout = TTY::Prompt.new
             build_or_start = a_new_workout.select("Do you want to select from our workouts gallery or make a new workout?", ["Select from gallery", "Make a new workout", "Go back to menu"])
             if build_or_start == "Select from gallery"
-                select_from_gallery # incomplete; does not give object id
+                select_from_gallery # incomplete; does not give object id; line 92
             elsif build_or_start == "Make a new workout"
-                make_new_workout #incomplete; does not have method for one to many models for .create
+                make_new_workout #incomplete; does not have method for one to many models for .create; line 102
             elsif build_or_start == "Go back to menu"
                 menu
             end
