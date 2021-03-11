@@ -2,7 +2,7 @@ require_relative '../config/environment'
 
 def welcome
 title = Artii::Base.new(:font => "slant")
-puts title.asciify("FULL BODY WORKOUT") # build a fully body workout
+puts title.asciify("FULL BODY WORKOUT")
 end
 
 def login 
@@ -46,8 +46,7 @@ def login
             exit!
         end
 end
-# >>>>>>>>>
-# >>>>>>>>>
+
 def intensity_options
     prompt = TTY::Prompt.new
     inten_opt = prompt.select("What is the intensity of this workout?", ["Low", "Medium", "High"])
@@ -100,8 +99,7 @@ def new_backs
     new_back = Back.create(name: new_name, intensity: new_intensity, duration: new_duration.to_f)
     return new_back
 end
-# >>>>>>>
-# >>>>>>> "Start a new workout"
+
 def select_from_gallery
     prompt_workouts = TTY::Prompt.new
         workouts = Workout.all
@@ -203,14 +201,70 @@ def make_new_workout
 end
 
 def look_at_profile
-    # puts first name
-    # puts last name
-    # puts weight
-    # puts height
-    # and so on...
+    profile_users = User.all.map{|user| user.user_name}
+    prompt = TTY::Prompt.new
+    profile_choice = prompt.select("Which would you like to do?", ["Check out my current profile", "Update my profile", "Go back to menu"])
+        if profile_choice == "Check out my current profile"
+            username_profile = prompt.ask("Please enter your username:")
+            password_profile = prompt.mask("Please enter your password:")
+            if profile_users.include?(username_profile) && User.all.find_by(password: password_profile)
+            profile_user = User.all.find_by(user_name: username_profile)
+            puts "Username: #{profile_user.user_name}".yellow
+            puts "First name: #{profile_user.first_name}".yellow
+            puts "Last name: #{profile_user.last_name}".yellow
+            puts "Weight: #{profile_user.weight} lbs".yellow
+            puts "Height: #{profile_user.height} inches".yellow
+            puts "Gender: #{profile_user.gender}".yellow
+            puts "BMI: #{profile_user.BMI}".yellow
+            puts "Birth year: #{profile_user.birth_year}".yellow
+            menu
+            end
+        elsif profile_choice == "Update my profile"
+            username_update_profile = prompt.ask("Please enter your username to update profile:")
+            if profile_users.include?(username_update_profile)
+            update_user = User.all.find_by(user_name: username_update_profile)
+            update_choice = prompt.select("Please select what you want to update:", ["My first name", "My last name", "My weight", "My height", "My BMI", "My gender", "Go back to menu"])
+                if update_choice == "My first name"
+                    profile_new_name = prompt.ask("Update first name:")
+                    update_user.update(first_name: profile_new_name)
+                    puts "Your first name has been updated.".green
+                    menu
+                elsif update_choice == "My last name"
+                    profile_new_last = prompt.ask("Update last name:")
+                    update_user.update(last_name: profile_new_last)
+                    puts "Your last name has been updated.".green
+                    menu
+                elsif update_choice == "My weight"
+                    profile_new_weight = prompt.ask("Update weight (lbs):")
+                    update_user.update(weight: profile_new_name)
+                    puts "Your weight has been updated.".green
+                    menu
+                elsif update_choice == "My height"
+                    profile_new_height = prompt.ask("Update height (inches):")
+                    update_user.update(height: profile_new_name)
+                    puts "Your height has been updated.".green
+                    menu
+                elsif update_choice == "My BMI"
+                    profile_new_bmi = prompt.ask("Update body mass index:")
+                    update_user.update(BMI: profile_new_bmi)
+                    puts "Your body mass index has been updated.".green
+                    menu
+                elsif update_choice == "My gender"
+                    profile_new_gender = prompt.ask("Update gender:")
+                    update_user.update(gender: profile_new_gender)
+                    puts "Your gender has been updated.".green
+                    menu
+                elsif update_choice == "Go back to menu"
+                    puts "Returning back to menu.".yellow
+                    menu
+                end
+            end
+        elsif  profile_choice == "Go back to menu"
+            puts "Returning back to menu.".yellow
+            menu
+        end
 end
-# >>>>>>>
-# >>>>>>> "Look at my account details"
+
 def delete_account
     users = User.all.map {|user| user.user_name}
     prompt = TTY::Prompt.new
@@ -230,7 +284,7 @@ def delete_account
         menu
     end
 end
-# >>>>>>>
+
 def change_username
     my_users = User.all.map{|use| use.user_name}
     prompt = TTY::Prompt.new
@@ -310,11 +364,11 @@ def menu
             # past 10 workouts
             # stretch goal
             puts "coding in-progress..."
-        elsif menu_choice == "Look at my account details" #stretch goals
+        elsif menu_choice == "Look at my account details"
             a_prompt = TTY::Prompt.new
             account_prompt = a_prompt.select("What do you want to do?", ["Look at my profile", "Change my username", "Change my password", "Delete my account", "Go back to menu"])
                 if account_prompt == "Look at my profile"
-                    # user.total_workouts <-- stretch goal
+                    look_at_profile
                 elsif account_prompt == "Change my username"
                     change_username
                 elsif account_prompt == "Change my password"
@@ -329,4 +383,4 @@ end
 
 welcome
 login
-# menu
+
