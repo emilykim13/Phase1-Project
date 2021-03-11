@@ -2,7 +2,7 @@ require_relative '../config/environment'
 
 def welcome
 title = Artii::Base.new(:font => "slant")
-puts title.asciify("FULL BODY") # build a fully body workout
+puts title.asciify("FULL BODY WORKOUT") # build a fully body workout
 end
 
 def login 
@@ -17,24 +17,9 @@ def login
                 menu
             else
                 puts "Incorrect username or password.".red
-                # login_try_again = TTY::Prompt.new
                 try_again = prompt.select("Would you like to try again?".light_yellow, ["Yes", "No"])
                 if try_again == "Yes"
-                    try_username = prompt.ask("What is your username?").light_yellow
-                    try_password = prompt.mask("Enter your password.").light_yellow
-                    # binding.pry #for some reason code breaks right here every time
-                    # >>>>>>>>>>>>>>>> LEFT OFF HERE <<<<<<<<<<<<<<<<<<<
-                    if users.include?(try_username) && User.all.find_by(password: try_password)
-                        # binding.pry
-                        puts "Let's Workout!"
-                        menu
-                        # binding.pry
-                    else users.include?(try_username) && User.all.find_by(password: try_password)
-                     "Incorrect username or password.".red
-                        welcome
-                        # login
-                    end
-                    
+                    login
                 elsif try_again == "No"
                     welcome
                     login
@@ -182,7 +167,7 @@ def select_from_gallery
     end
 end
 
-def workout_type_options #method for make_new_workout
+def workout_type_options
     prompt = TTY::Prompt.new
     type_opt = prompt.select("What type of workout is this?", ["HIIT", "Resistance Training", "Cardio", "Flexibility"])
     if type_opt == "HIIT"
@@ -306,7 +291,6 @@ def change_password
         menu
     end
 end
-
 
 def menu
     options = TTY::Prompt.new
