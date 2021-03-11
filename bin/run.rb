@@ -2,7 +2,7 @@ require_relative '../config/environment'
 
 def welcome
 title = Artii::Base.new(:font => "slant")
-puts title.asciify("Gym Time!!")
+puts title.asciify("FULL BODY") # build a fully body workout
 end
 
 def login 
@@ -22,15 +22,24 @@ def login
                 if try_again == "Yes"
                     try_username = prompt.ask("What is your username?").light_yellow
                     try_password = prompt.mask("Enter your password.").light_yellow
+                    # binding.pry #for some reason code breaks right here every time
+                    # >>>>>>>>>>>>>>>> LEFT OFF HERE <<<<<<<<<<<<<<<<<<<
                     if users.include?(try_username) && User.all.find_by(password: try_password)
+                        # binding.pry
                         puts "Let's Workout!"
                         menu
+                        # binding.pry
+                    else users.include?(try_username) && User.all.find_by(password: try_password)
+                     "Incorrect username or password.".red
+                        welcome
+                        # login
                     end
-                else try_again == "No"
+                    
+                elsif try_again == "No"
                     welcome
-                    # login
+                    login
                 end
-                exit!
+                
             end
         end
         if login_choice == "Sign Up"
@@ -156,7 +165,7 @@ def select_from_gallery
         x_prompt = TTY::Prompt.new
         puts_prompt = x_prompt.select("How would you like your workout presented?", ["An awesome message from your 7th grade gym teacher", "Just give me the exercises"])
         if puts_prompt == "An awesome message from your 7th grade gym teacher"
-        puts  "Your 7th grade gym teacher Mr.Willson is about to be so proud of you! This workout has an ab exercise called #{abs_obj_name.yellow}, it is a #{abs_obj_intensity} intensity exercise that lasts for #{abs_obj_duration} minute(s). 
+        puts  "Your 7th grade gym teacher Mr.Willson is about to be so proud of you! This workout has an ab exercise called #{abs_obj_name}, it is a #{abs_obj_intensity} intensity exercise that lasts for #{abs_obj_duration} minute(s). 
         This workout has an #{arms_obj_name}, it is a #{arms_obj_intensity} intensity exercise that lasts for #{arms_obj_duration} minute(s). Let's get going! 
         There is only one thing we say to skipping leg day. Not today. This workout is a leg exercise called #{legs_obj_name}, it is a #{legs_obj_intensity} intensity exercise that lasts for #{legs_obj_duration} minute(s). Woof!
         It's about to be summer so we can't forget those shoulders. This workout is a shoulder exercise called #{shoulders_obj_name}, it is a #{shoulders_obj_intensity} intensity exercise that lasts for #{shoulders_obj_duration} minute(s).
@@ -208,8 +217,12 @@ def make_new_workout
     menu
 end
 
-def look_past_workouts
-    menu
+def look_at_profile
+    # puts first name
+    # puts last name
+    # puts weight
+    # puts height
+    # and so on...
 end
 # >>>>>>>
 # >>>>>>> "Look at my account details"
@@ -246,8 +259,6 @@ def change_username
                 new_username = prompt.ask("Please enter new username:")
                 new_username_confirm = prompt.ask("Please confirm your new username:")
                 if new_username == new_username_confirm
-                # x_user = User.all.select{|un| un.user_name == your_username}
-# why didnt this above line work suffice the need of the object instance whereas the below did
                 x_user = User.all.find_by(user_name: your_username)
                 x_user.update(user_name: new_username)
                 puts "Your username is now changed.".light_yellow
@@ -278,8 +289,6 @@ def change_password
                 new_password = prompt.ask("Please enter new password:")
                 new_password_confirm = prompt.ask("Please confirm your new password:")
                 if new_password == new_password_confirm
-                # x_user = User.all.select{|un| un.user_name == your_username}
-# why didnt this above line work suffice the need of the object instance whereas the below did
                 x_user = User.all.find_by(password: your_password)
                 x_user.update(password: new_password)
                 puts "Your password is now changed.".light_yellow
@@ -317,10 +326,10 @@ def menu
             # past 10 workouts
             # stretch goal
             puts "coding in-progress..."
-        elsif menu_choice = "Look at my account details" #stretch goals
+        elsif menu_choice == "Look at my account details" #stretch goals
             a_prompt = TTY::Prompt.new
-            account_prompt = a_prompt.select("What do you want to do?", ["Look at my total workouts", "Change my username", "Change my password", "Delete my account", "Go back to menu"])
-                if account_prompt == "Look at my total workouts"
+            account_prompt = a_prompt.select("What do you want to do?", ["Look at my profile", "Change my username", "Change my password", "Delete my account", "Go back to menu"])
+                if account_prompt == "Look at my profile"
                     # user.total_workouts <-- stretch goal
                 elsif account_prompt == "Change my username"
                     change_username
@@ -336,4 +345,4 @@ end
 
 welcome
 login
-menu
+# menu
