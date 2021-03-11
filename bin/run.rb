@@ -14,19 +14,21 @@ def login
             current_password = prompt.mask("Enter your password.".green)
             if users.include?(current_username) && User.all.find_by(password: current_password)
                 puts "Let's Workout!"
+                menu
             else
                 puts "Incorrect username or password.".red
-                login_try_again = TTY::Prompt.new
-                try_again = login_try_again.select("Would you like to try again?".light_yellow, ["Yes", "No"])
+                # login_try_again = TTY::Prompt.new
+                try_again = prompt.select("Would you like to try again?".light_yellow, ["Yes", "No"])
                 if try_again == "Yes"
-                    current_username = prompt.ask("What is your username?").light_yellow
-                    current_password = prompt.mask("Enter your password.").light_yellow
-                    if users.include?(current_username) && User.all.find_by(password: current_password)
+                    try_username = prompt.ask("What is your username?").light_yellow
+                    try_password = prompt.mask("Enter your password.").light_yellow
+                    if users.include?(try_username) && User.all.find_by(password: try_password)
                         puts "Let's Workout!"
+                        menu
                     end
                 else try_again == "No"
                     welcome
-                    login
+                    # login
                 end
                 exit!
             end
@@ -231,6 +233,72 @@ def delete_account
     end
 end
 # >>>>>>>
+def change_username
+    my_users = User.all.map{|use| use.user_name}
+    prompt = TTY::Prompt.new
+    you_sure = prompt.select("Are you sure you want to change your username?", ["Yes", "No"])
+    if you_sure == "Yes"
+        your_username = prompt.ask("Please enter your usename to continue:")
+        your_password = prompt.mask("Please enter your password:")
+        if my_users.include?(your_username) && User.all.find_by(password: your_password)
+            your_confirm_password = prompt.mask("Please confirm your password:")
+            if your_password == your_confirm_password
+                new_username = prompt.ask("Please enter new username:")
+                new_username_confirm = prompt.ask("Please confirm your new username:")
+                if new_username == new_username_confirm
+                # x_user = User.all.select{|un| un.user_name == your_username}
+# why didnt this above line work suffice the need of the object instance whereas the below did
+                x_user = User.all.find_by(user_name: your_username)
+                x_user.update(user_name: new_username)
+                puts "Your username is now changed.".light_yellow
+                welcome
+                login
+                end
+            else 
+                puts "Usernames do not match."
+            end
+        else 
+            puts "Incorrect username or password."
+            menu
+        end
+    elsif you_sure == "No"
+        menu
+    end
+end
+def change_password
+    my_users = User.all.map{|use| use.user_name}
+    prompt = TTY::Prompt.new
+    you_sure = prompt.select("Are you sure you want to change your password?", ["Yes", "No"])
+    if you_sure == "Yes"
+        your_username = prompt.ask("Please enter your usename to continue:")
+        your_password = prompt.mask("Please enter your password:")
+        if my_users.include?(your_username) && User.all.find_by(password: your_password)
+            your_confirm_password = prompt.mask("Please confirm your password:")
+            if your_password == your_confirm_password
+                new_password = prompt.ask("Please enter new password:")
+                new_password_confirm = prompt.ask("Please confirm your new password:")
+                if new_password == new_password_confirm
+                # x_user = User.all.select{|un| un.user_name == your_username}
+# why didnt this above line work suffice the need of the object instance whereas the below did
+                x_user = User.all.find_by(password: your_password)
+                x_user.update(password: new_password)
+                puts "Your password is now changed.".light_yellow
+                welcome
+                login
+                end
+            else 
+                puts "Passwords do not match."
+            end
+        else 
+            puts "Incorrect username or password."
+            menu
+        end
+    elsif you_sure == "No"
+        menu
+    end
+end
+
+
 def menu
     options = TTY::Prompt.new
     menu_choice = options.select("What would you like to do?", ["Start a new workout", "Look at my past workouts", "Look at my account details"])
@@ -255,9 +323,9 @@ def menu
                 if account_prompt == "Look at my total workouts"
                     # user.total_workouts <-- stretch goal
                 elsif account_prompt == "Change my username"
-                    # Enter password, if correct, enter new username, save
+                    change_username
                 elsif account_prompt == "Change my password"
-                    # Enter password, if correct, enter new password, save
+                    change_password
                 elsif account_prompt == "Delete my account"
                     delete_account
                 elsif account_prompt == "Go back to menu"
