@@ -3,21 +3,25 @@ require_relative '../config/environment'
 def welcome
 title = Artii::Base.new(:font => "slant")
 puts title.asciify("FULL BODY WORKOUT")
+puts "Welcome to Full Body Workout CLI app, made by Emily and Robert! 
+FBW is a CLI app that allows you to build a full body workout, save it to our gallery of workouts and access other users' 
+workouts from the same gallery. Please login to continue or sign up to make an account! :)".magenta
 end
 
 def login 
     users = User.all.map {|user| user.user_name}
     prompt = TTY::Prompt.new
-    login_choice = prompt.select("What would you like to do?", ["Login", "Sign Up", "Exit"])
+    login_choice = prompt.select("What would you like to do?".blue, ["Login", "Sign Up", "Exit"])
         if login_choice == "Login"
             current_username = prompt.ask("What is your username?".green)
             current_password = prompt.mask("Enter your password.".green)
             if users.include?(current_username) && User.all.find_by(password: current_password)
-                puts "Let's Workout!"
+                header = Artii::Base.new(:font => "slant")
+                puts header.asciify("Let's Workout!")
                 menu
             else
                 puts "Incorrect username or password.".red
-                try_again = prompt.select("Would you like to try again?".light_yellow, ["Yes", "No"])
+                try_again = prompt.select("Would you like to try again?".blue, ["Yes", "No"])
                 if try_again == "Yes"
                     login
                 elsif try_again == "No"
@@ -49,7 +53,7 @@ end
 
 def intensity_options
     prompt = TTY::Prompt.new
-    inten_opt = prompt.select("What is the intensity of this workout?", ["Low", "Medium", "High"])
+    inten_opt = prompt.select("What is the intensity of this workout?".blue, ["Low", "Medium", "High"])
     if inten_opt == "Low"
         set_intensity = "low"
     elsif inten_opt == "Medium"
@@ -103,15 +107,15 @@ end
 def select_from_gallery
     prompt_workouts = TTY::Prompt.new
         workouts = Workout.all
-        workout_choice = prompt_workouts.select("Pick a workout.") do |menu|
+        workout_choice = prompt_workouts.select("Pick a workout.".blue) do |menu|
             workouts.each do |object|
                 menu.choice "#{object.name}", object
             end
         end
         binding.pry
-    puts "Great choice! This is a #{workout_choice.workout_type} workout.".light_blue
+    puts "Great choice! This is a #{workout_choice.workout_type} workout.".blue
     prompt_start = TTY::Prompt.new
-    start_workout = prompt_start.select("Would you like to start your selected workout?".light_blue, ["Yes", "No"])
+    start_workout = prompt_start.select("Would you like to start your selected workout?".blue, ["Yes", "No"])
     if start_workout == "Yes"
         x1 = workout_choice.abs_id
         x2 = workout_choice.arms_id
@@ -146,19 +150,21 @@ def select_from_gallery
         backs_obj_duration = backs_object.map{|object| object.duration}
 
         x_prompt = TTY::Prompt.new
-        puts_prompt = x_prompt.select("How would you like your workout presented?", ["An awesome message from your 7th grade gym teacher", "Just give me the exercises"])
+        puts_prompt = x_prompt.select("How would you like your workout presented?".blue, ["An awesome message from your 7th grade gym teacher", "Just give me the exercises"])
         if puts_prompt == "An awesome message from your 7th grade gym teacher"
         puts  "Your 7th grade gym teacher Mr.Willson is about to be so proud of you! This workout has an ab exercise called #{abs_obj_name}, it is a #{abs_obj_intensity} intensity exercise that lasts for #{abs_obj_duration} minute(s). 
         This workout has an #{arms_obj_name}, it is a #{arms_obj_intensity} intensity exercise that lasts for #{arms_obj_duration} minute(s). Let's get going! 
         There is only one thing we say to skipping leg day. Not today. This workout is a leg exercise called #{legs_obj_name}, it is a #{legs_obj_intensity} intensity exercise that lasts for #{legs_obj_duration} minute(s). Woof!
         It's about to be summer so we can't forget those shoulders. This workout is a shoulder exercise called #{shoulders_obj_name}, it is a #{shoulders_obj_intensity} intensity exercise that lasts for #{shoulders_obj_duration} minute(s).
         Glad to see you back, and ready for more! This workout is a back exercise called #{backs_obj_name}, it is a #{backs_obj_intensity} intensity exercise that lasts for #{backs_obj_duration} minute(s).".magenta
+        menu
         elsif puts_prompt == "Just give me the exercises"
         puts "You have an ab exercise called #{abs_obj_name} that is a #{abs_obj_intensity} intensity level exercise, do this for #{abs_obj_duration} minute(s).".magenta
         puts "You have an arm exercise called #{arms_obj_name} that is a #{arms_obj_intensity} intensity level exercise, do this for #{arms_obj_duration} minute(s).".magenta
         puts "You have a leg exercise called #{legs_obj_name} that is a #{legs_obj_intensity} intensity level exercise, do this for #{legs_obj_duration} minute(s).".magenta
         puts "You have a shoulder exercise called #{shoulders_obj_name} that is a #{shoulders_obj_intensity} intensity level exercise, do this for #{shoulders_obj_duration} minute(s).".magenta
         puts "You have a back exercise called #{backs_obj_name} that is a #{backs_obj_intensity} intensity level exercise, do this for #{backs_obj_duration} minute(s).".magenta
+        menu
         end
     elsif start_workout == "No"
         menu
@@ -167,7 +173,7 @@ end
 
 def workout_type_options
     prompt = TTY::Prompt.new
-    type_opt = prompt.select("What type of workout is this?", ["HIIT", "Resistance Training", "Cardio", "Flexibility"])
+    type_opt = prompt.select("What type of workout is this?".blue, ["HIIT", "Resistance Training", "Cardio", "Flexibility"])
     if type_opt == "HIIT"
         set_type = "HIIT"
     elsif type_opt == "Resistance Training"
@@ -203,7 +209,7 @@ end
 def look_at_profile
     profile_users = User.all.map{|user| user.user_name}
     prompt = TTY::Prompt.new
-    profile_choice = prompt.select("Which would you like to do?", ["Check out my current profile", "Update my profile", "Go back to menu"])
+    profile_choice = prompt.select("Which would you like to do?".blue, ["Check out my current profile", "Update my profile", "Go back to menu"])
         if profile_choice == "Check out my current profile"
             username_profile = prompt.ask("Please enter your username:")
             password_profile = prompt.mask("Please enter your password:")
@@ -223,7 +229,7 @@ def look_at_profile
             username_update_profile = prompt.ask("Please enter your username to update profile:")
             if profile_users.include?(username_update_profile)
             update_user = User.all.find_by(user_name: username_update_profile)
-            update_choice = prompt.select("Please select what you want to update:", ["My first name", "My last name", "My weight", "My height", "My BMI", "My gender", "Go back to menu"])
+            update_choice = prompt.select("Please select what you want to update:".blue, ["My first name", "My last name", "My weight", "My height", "My BMI", "My gender", "Go back to menu"])
                 if update_choice == "My first name"
                     profile_new_name = prompt.ask("Update first name:")
                     update_user.update(first_name: profile_new_name)
@@ -288,7 +294,7 @@ end
 def change_username
     my_users = User.all.map{|use| use.user_name}
     prompt = TTY::Prompt.new
-    you_sure = prompt.select("Are you sure you want to change your username?", ["Yes", "No"])
+    you_sure = prompt.select("Are you sure you want to change your username?".blue, ["Yes", "No"])
     if you_sure == "Yes"
         your_username = prompt.ask("Please enter your usename to continue:")
         your_password = prompt.mask("Please enter your password:")
@@ -318,7 +324,7 @@ end
 def change_password
     my_users = User.all.map{|use| use.user_name}
     prompt = TTY::Prompt.new
-    you_sure = prompt.select("Are you sure you want to change your password?", ["Yes", "No"])
+    you_sure = prompt.select("Are you sure you want to change your password?".blue, ["Yes", "No"])
     if you_sure == "Yes"
         your_username = prompt.ask("Please enter your usename to continue:")
         your_password = prompt.mask("Please enter your password:")
@@ -348,10 +354,10 @@ end
 
 def menu
     options = TTY::Prompt.new
-    menu_choice = options.select("What would you like to do?", ["Start a new workout", "Look at my past workouts", "Look at my account details"])
+    menu_choice = options.select("What would you like to do?", ["Start a new workout", "Look at my account details", "Exit app"])
         if menu_choice == "Start a new workout"
             a_new_workout = TTY::Prompt.new
-            build_or_start = a_new_workout.select("Do you want to select from our workouts gallery or make a new workout?", ["Select from gallery", "Make a new workout", "Go back to menu"])
+            build_or_start = a_new_workout.select("Do you want to select from our workouts gallery or make a new workout?".blue, ["Select from gallery", "Make a new workout", "Go back to menu"])
             if build_or_start == "Select from gallery"
                 select_from_gallery
             elsif build_or_start == "Make a new workout"
@@ -359,14 +365,9 @@ def menu
             elsif build_or_start == "Go back to menu"
                 menu
             end
-        elsif menu_choice == "Look at my past workouts"
-            # look_past_workouts 
-            # past 10 workouts
-            # stretch goal
-            puts "coding in-progress..."
         elsif menu_choice == "Look at my account details"
             a_prompt = TTY::Prompt.new
-            account_prompt = a_prompt.select("What do you want to do?", ["Look at my profile", "Change my username", "Change my password", "Delete my account", "Go back to menu"])
+            account_prompt = a_prompt.select("What do you want to do?".blue, ["Look at my profile", "Change my username", "Change my password", "Delete my account", "Go back to menu"])
                 if account_prompt == "Look at my profile"
                     look_at_profile
                 elsif account_prompt == "Change my username"
@@ -378,6 +379,8 @@ def menu
                 elsif account_prompt == "Go back to menu"
                     menu
                 end
+        elsif menu_choice == "Exit"
+            exit!
         end
 end
 
