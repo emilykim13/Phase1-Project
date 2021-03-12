@@ -241,8 +241,8 @@ def look_at_profile
     profile_choice = prompt.select("Which would you like to do?".blue, ["Check out my current profile", "Update my profile", "Go back to menu"])
         if profile_choice == "Check out my current profile"
             username_profile = prompt.ask("Please enter your username:")
-            password_profile = prompt.mask("Please enter your password:")
-            if profile_users.include?(username_profile) && User.all.find_by(password: password_profile)
+            # password_profile = prompt.mask("Please enter your password:")
+            if profile_users.include?(username_profile) # && User.all.find_by(password: password_profile)
             profile_user = User.all.find_by(user_name: username_profile)
             puts "Username: #{profile_user.user_name}".yellow
             puts "First name: #{profile_user.first_name}".yellow
