@@ -13,8 +13,8 @@ def login
     prompt = TTY::Prompt.new
     login_choice = prompt.select("What would you like to do?".blue, ["Login", "Sign Up", "Exit"])
         if login_choice == "Login"
-            current_username = prompt.ask("What is your username?".green)
-            current_password = prompt.mask("Enter your password.".green)
+            current_username = prompt.ask("What is your username?".green, required: true)
+            current_password = prompt.mask("Enter your password.".green, required: true)
             if users.include?(current_username) && User.all.find_by(password: current_password)
                 header = Artii::Base.new(:font => "slant")
                 puts header.asciify("Let's Workout!")
@@ -28,19 +28,31 @@ def login
                     welcome
                     login
                 end
-                
+                binding.pry
             end
         end
         if login_choice == "Sign Up"
-            new_username = prompt.ask("Make a username.".light_yellow)
-            new_password = prompt.ask("Make a password.".light_yellow)
-            new_first_name = prompt.ask("What is your first name?".light_yellow)
-            new_last_name = prompt.ask("What is your last name?".light_yellow)
-            new_weight = prompt.ask("How much do you weigh(lbs)?".light_yellow)
-            new_height = prompt.ask("How tall are you(inches)?".light_yellow)
+            new_username = prompt.ask("Make a username.".light_yellow, required: true)
+            new_password = prompt.ask("Make a password.".light_yellow, required: true)
+            new_first_name = prompt.ask("What is your first name?".light_yellow, required: true)
+            new_last_name = prompt.ask("What is your last name?".light_yellow, required: true)
+            new_weight = prompt.ask("How much do you weigh(lbs)?".light_yellow, required: true) do |a|
+                a.validate(/^(?=.*[0-9]).{1,4}$/)
+                a.messages[:valid?] = "Invalid, try again."
+                end
+            new_height = prompt.ask("How tall are you(inches)?".light_yellow, required: true) do |a|
+                a.validate(/^(?=.*[0-9]).{1,4}$/)
+                a.messages[:valid?] = "Invalid, try again."
+                end
             new_gender = prompt.ask("What is your gender?".light_yellow)
-            new_BMI = prompt.ask("What is your BMI?".light_yellow)
-            new_birth_year = prompt.ask("What year were you born?".light_yellow)
+            new_BMI = prompt.ask("What is your BMI?".light_yellow, required: true) do |a|
+                a.validate(/^(?=.*[0-9]).{1,3}$/)
+                a.messages[:valid?] = "Invalid, try again."
+                end
+            new_birth_year = prompt.ask("What year were you born?".light_yellow, required: true) do |a|
+                a.validate(/^(?=.*[0-9]).{4,4}$/)
+                a.messages[:valid?] = "Invalid, please try again. Example: 1997."
+                end
             User.create(user_name: new_username, password: new_password, first_name: new_first_name, last_name: new_last_name, weight: new_weight, height: new_height, gender: new_gender, BMI: new_BMI, birth_year: new_birth_year)
             puts "New account made!".green
             welcome
@@ -50,6 +62,9 @@ def login
             exit!
         end
 end
+def my_validate
+end
+
 
 def intensity_options
     prompt = TTY::Prompt.new
@@ -67,7 +82,10 @@ def new_abs
     prompt = TTY::Prompt.new
     new_name = prompt.ask("Name of this ab exercise:".blue)
     new_intensity = intensity_options
-    new_duration = prompt.ask("What is the duration of this exercise in minute(s)?".blue)
+    new_duration = prompt.ask("What is the duration of this exercise in minute(s)?".blue, required: true) do |a|
+        a.validate(/^(?=.*[0-9]).{1,4}$/)
+        a.messages[:valid?] = "Invalid, try again."
+        end
     new_ab = Ab.create(name: new_name, intensity: new_intensity, duration: new_duration.to_f)
     return new_ab
 end
@@ -75,7 +93,10 @@ def new_arms
     prompt = TTY::Prompt.new
     new_name = prompt.ask("Name of this arm exercise:".blue)
     new_intensity = intensity_options
-    new_duration = prompt.ask("What is the duration of this exercise in minute(s)?".blue)
+    new_duration = prompt.ask("What is the duration of this exercise in minute(s)?".blue, required: true) do |a|
+        a.validate(/^(?=.*[0-9]).{1,4}$/)
+        a.messages[:valid?] = "Invalid, try again."
+        end
     new_arm = Arm.create(name: new_name, intensity: new_intensity, duration: new_duration.to_f)
     return new_arm
 end
@@ -83,7 +104,10 @@ def new_legs
     prompt = TTY::Prompt.new
     new_name = prompt.ask("Name of this leg exercise:".blue)
     new_intensity = intensity_options
-    new_duration = prompt.ask("What is the duration of this exercise in minute(s)?".blue)
+    new_duration = prompt.ask("What is the duration of this exercise in minute(s)?".blue, required: true) do |a|
+        a.validate(/^(?=.*[0-9]).{1,4}$/)
+        a.messages[:valid?] = "Invalid, try again."
+        end
     new_leg = Leg.create(name: new_name, intensity: new_intensity, duration: new_duration.to_f)
     return new_leg
 end
@@ -91,7 +115,10 @@ def new_shoulders
     prompt = TTY::Prompt.new
     new_name = prompt.ask("Name of this shoulder exercise:".blue)
     new_intensity = intensity_options
-    new_duration = prompt.ask("What is the duration of this exercise in minute(s)?".blue)
+    new_duration = prompt.ask("What is the duration of this exercise in minute(s)?".blue, required: true) do |a|
+        a.validate(/^(?=.*[0-9]).{1,4}$/)
+        a.messages[:valid?] = "Invalid, try again."
+        end
     new_shoulder = Shoulder.create(name: new_name, intensity: new_intensity, duration: new_duration.to_f)
     return new_shoulder
 end
@@ -99,7 +126,10 @@ def new_backs
     prompt = TTY::Prompt.new
     new_name = prompt.ask("Name of this back exercise:".blue)
     new_intensity = intensity_options
-    new_duration = prompt.ask("What is the duration of this exercise in minute(s)?".blue)
+    new_duration = prompt.ask("What is the duration of this exercise in minute(s)?".blue, required: true) do |a|
+        a.validate(/^(?=.*[0-9]).{1,4}$/)
+        a.messages[:valid?] = "Invalid, try again."
+        end
     new_back = Back.create(name: new_name, intensity: new_intensity, duration: new_duration.to_f)
     return new_back
 end
@@ -112,7 +142,6 @@ def select_from_gallery
                 menu.choice "#{object.name}", object
             end
         end
-        binding.pry
     puts "Great choice! This is a #{workout_choice.workout_type} workout.".blue
     prompt_start = TTY::Prompt.new
     start_workout = prompt_start.select("Would you like to start your selected workout?".blue, ["Yes", "No"])
@@ -241,17 +270,26 @@ def look_at_profile
                     puts "Your last name has been updated.".green
                     menu
                 elsif update_choice == "My weight"
-                    profile_new_weight = prompt.ask("Update weight (lbs):")
+                    profile_new_weight = prompt.ask("Update weight (lbs):", required: true) do |a|
+                        a.validate(/^(?=.*[0-9]).{1,4}$/)
+                        a.messages[:valid?] = "Invalid, try again."
+                        end
                     update_user.update(weight: profile_new_name)
                     puts "Your weight has been updated.".green
                     menu
                 elsif update_choice == "My height"
-                    profile_new_height = prompt.ask("Update height (inches):")
+                    profile_new_height = prompt.ask("Update height (inches):", required: true) do |a|
+                        a.validate(/^(?=.*[0-9]).{1,4}$/)
+                        a.messages[:valid?] = "Invalid, try again."
+                        end
                     update_user.update(height: profile_new_name)
                     puts "Your height has been updated.".green
                     menu
                 elsif update_choice == "My BMI"
-                    profile_new_bmi = prompt.ask("Update body mass index:")
+                    profile_new_bmi = prompt.ask("Update body mass index:", required: true) do |a|
+                        a.validate(/^(?=.*[0-9]).{1,3}$/)
+                        a.messages[:valid?] = "Invalid, try again."
+                        end
                     update_user.update(BMI: profile_new_bmi)
                     puts "Your body mass index has been updated.".green
                     menu
