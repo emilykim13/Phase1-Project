@@ -28,7 +28,6 @@ def login
                     welcome
                     login
                 end
-                binding.pry
             end
         end
         if login_choice == "Sign Up"
@@ -61,8 +60,6 @@ def login
         if login_choice == "Exit"
             exit!
         end
-end
-def my_validate
 end
 
 
@@ -274,7 +271,7 @@ def look_at_profile
                         a.validate(/^(?=.*[0-9]).{1,4}$/)
                         a.messages[:valid?] = "Invalid, try again."
                         end
-                    update_user.update(weight: profile_new_name)
+                    update_user.update(weight: profile_new_weight)
                     puts "Your weight has been updated.".green
                     menu
                 elsif update_choice == "My height"
@@ -282,7 +279,7 @@ def look_at_profile
                         a.validate(/^(?=.*[0-9]).{1,4}$/)
                         a.messages[:valid?] = "Invalid, try again."
                         end
-                    update_user.update(height: profile_new_name)
+                    update_user.update(height: profile_new_height)
                     puts "Your height has been updated.".green
                     menu
                 elsif update_choice == "My BMI"
@@ -334,7 +331,7 @@ def change_username
     prompt = TTY::Prompt.new
     you_sure = prompt.select("Are you sure you want to change your username?".blue, ["Yes", "No"])
     if you_sure == "Yes"
-        your_username = prompt.ask("Please enter your usename to continue:")
+        your_username = prompt.ask("Please enter your username to continue:")
         your_password = prompt.mask("Please enter your password:")
         if my_users.include?(your_username) && User.all.find_by(password: your_password)
             your_confirm_password = prompt.mask("Please confirm your password:")
@@ -364,7 +361,7 @@ def change_password
     prompt = TTY::Prompt.new
     you_sure = prompt.select("Are you sure you want to change your password?".blue, ["Yes", "No"])
     if you_sure == "Yes"
-        your_username = prompt.ask("Please enter your usename to continue:")
+        your_username = prompt.ask("Please enter your username to continue:")
         your_password = prompt.mask("Please enter your password:")
         if my_users.include?(your_username) && User.all.find_by(password: your_password)
             your_confirm_password = prompt.mask("Please confirm your password:")
